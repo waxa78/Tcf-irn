@@ -1,0 +1,1685 @@
+<!DOCTYPE html>
+<html lang="fr" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>TCF IRN - Préparation B1 Nationalité Française</title>
+  <meta name="description" content="Application complète et hors ligne d'entraînement au TCF IRN pour la nationalité française et la carte de résident (Niveau B1).">
+  <meta name="theme-color" content="#2563eb">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="TCF IRN B1">
+
+  <!-- Manifest PWA dynamique via Data URI -->
+  <link rel="manifest" id="pwa-manifest">
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#eff6ff',
+              100: '#dbeafe',
+              500: '#3b82f6',
+              600: '#2563eb',
+              700: '#1d4ed8',
+              900: '#1e3a8a',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Optimisations mobiles et safe areas */
+    body {
+      -webkit-tap-highlight-color: transparent;
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+    .pb-safe {
+      padding-bottom: calc(4.5rem + env(safe-area-inset-bottom));
+    }
+    /* Scrollbars douces */
+    ::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+    .dark ::-webkit-scrollbar-thumb {
+      background: #475569;
+    }
+    /* Empêcher le rebond élastique sur iOS */
+    html, body {
+      overscroll-behavior-y: none;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 min-h-full flex flex-col font-sans transition-colors duration-200">
+
+  <!-- BANDEAU HAUT (Header) -->
+  <header class="sticky top-0 z-40 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 px-4 py-3">
+    <div class="max-w-4xl mx-auto flex items-center justify-between">
+      <div class="flex items-center space-x-2.5">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-700 via-indigo-600 to-rose-500 flex items-center justify-center text-white shadow-sm">
+          <!-- Icône République / Écusson -->
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+          </svg>
+        </div>
+        <div>
+          <div class="flex items-center space-x-2">
+            <h1 class="text-base font-extrabold tracking-tight text-slate-900 dark:text-white">TCF IRN</h1>
+            <span class="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300">Niveau B1</span>
+          </div>
+          <p class="text-[11px] text-slate-500 dark:text-slate-400 leading-none">Nationalité & Résidence</p>
+        </div>
+      </div>
+
+      <div class="flex items-center space-x-2">
+        <!-- Bouton Partager le lien -->
+        <button id="btn-share" onclick="shareApp()" class="p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition" title="Partager avec un ami">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+          </svg>
+        </button>
+
+        <!-- Bascule Sombre/Clair -->
+        <button id="btn-theme" onclick="toggleTheme()" class="p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition" title="Changer de thème">
+          <svg id="icon-sun" class="w-5 h-5 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+          </svg>
+          <svg id="icon-moon" class="w-5 h-5 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- BANNIÈRE D'INSTALLATION PWA HORS LIGNE (Affichée sur mobile si possible) -->
+  <div id="pwa-install-banner" class="hidden bg-blue-600 text-white px-4 py-2 text-xs flex items-center justify-between">
+    <div class="flex items-center space-x-2">
+      <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+      </svg>
+      <span>Installez l'app pour réviser même <strong>sans connexion</strong></span>
+    </div>
+    <div class="flex items-center space-x-2">
+      <button onclick="installPWA()" class="bg-white text-blue-700 font-bold px-2.5 py-1 rounded-md text-[11px] shadow-sm">Installer</button>
+      <button onclick="dismissPwaBanner()" class="text-white/80 hover:text-white">&times;</button>
+    </div>
+  </div>
+
+  <!-- CONTENEUR DES PAGES (SPA) -->
+  <main class="flex-1 max-w-4xl w-full mx-auto p-4 pb-safe space-y-5">
+
+    <!-- PAGE 1 : TABLEAU DE BORD (STATS & ACCUEIL) -->
+    <section id="view-dashboard" class="space-y-5">
+      <!-- Carte d'accueil avec diagnostic de niveau -->
+      <div class="rounded-2xl p-5 bg-gradient-to-br from-blue-700 via-indigo-700 to-slate-900 text-white shadow-lg relative overflow-hidden">
+        <div class="relative z-10 space-y-3">
+          <div class="inline-flex items-center space-x-1.5 bg-white/15 backdrop-blur-md px-2.5 py-1 rounded-full text-xs font-medium text-blue-100 border border-white/20">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span>Progression TCF IRN B1</span>
+          </div>
+          <h2 class="text-xl sm:text-2xl font-black">Prêt pour la nationalité ?</h2>
+          <p class="text-xs sm:text-sm text-blue-100 max-w-md leading-relaxed">
+            Pour la naturalisation, le décret exige la validation du <strong>niveau B1</strong> en compréhension et expression (orale et écrite).
+          </p>
+
+          <div class="pt-2 flex items-center space-x-3">
+            <div class="bg-white/10 backdrop-blur-sm rounded-xl p-3 border border-white/15 text-center flex-1">
+              <span class="block text-[11px] text-blue-200">Score global QCM</span>
+              <span id="dash-global-score" class="text-xl font-extrabold">0%</span>
+            </div>
+            <div class="bg-white/10 backdrop-blur-sm rounded-xl p-3 border border-white/15 text-center flex-1">
+              <span class="block text-[11px] text-blue-200">Statut B1 estimé</span>
+              <span id="dash-level-badge" class="text-sm font-bold text-amber-300">En cours</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Métriques de travail -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div class="bg-white dark:bg-slate-800 p-3.5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-xs">
+          <span class="text-xs text-slate-500 dark:text-slate-400 block">Compr. Écrite</span>
+          <span id="dash-ce-score" class="text-lg font-bold text-slate-900 dark:text-white">0 / 4</span>
+          <span class="text-[10px] text-blue-600 dark:text-blue-400 font-medium block mt-0.5">20 min à l'examen</span>
+        </div>
+        <div class="bg-white dark:bg-slate-800 p-3.5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-xs">
+          <span class="text-xs text-slate-500 dark:text-slate-400 block">Compr. Orale</span>
+          <span id="dash-co-score" class="text-lg font-bold text-slate-900 dark:text-white">0 / 4</span>
+          <span class="text-[10px] text-indigo-600 dark:text-indigo-400 font-medium block mt-0.5">15 min à l'examen</span>
+        </div>
+        <div class="bg-white dark:bg-slate-800 p-3.5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-xs">
+          <span class="text-xs text-slate-500 dark:text-slate-400 block">Expr. Écrite</span>
+          <span id="dash-ee-count" class="text-lg font-bold text-slate-900 dark:text-white">0 / 3</span>
+          <span class="text-[10px] text-amber-600 dark:text-amber-400 font-medium block mt-0.5">30 min (3 tâches)</span>
+        </div>
+        <div class="bg-white dark:bg-slate-800 p-3.5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-xs">
+          <span class="text-xs text-slate-500 dark:text-slate-400 block">Expr. Orale</span>
+          <span id="dash-eo-count" class="text-lg font-bold text-slate-900 dark:text-white">0 / 3</span>
+          <span class="text-[10px] text-rose-600 dark:text-rose-400 font-medium block mt-0.5">10 min d'entretien</span>
+        </div>
+      </div>
+
+      <!-- Menu rapide d'accès aux modules -->
+      <div class="space-y-3">
+        <h3 class="text-sm font-bold text-slate-900 dark:text-white flex items-center space-x-2">
+          <span>Accéder aux épreuves officielles</span>
+        </h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <button onclick="navigateTo('ce')" class="flex items-center justify-between p-4 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 hover:border-blue-500 transition text-left group">
+            <div class="flex items-center space-x-3">
+              <div class="w-10 h-10 rounded-lg bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold">CE</div>
+              <div>
+                <strong class="block text-sm text-slate-900 dark:text-white group-hover:text-blue-600 transition">Compréhension Écrite</strong>
+                <span class="text-xs text-slate-500 dark:text-slate-400">Annonces, courriels & formulaires</span>
+              </div>
+            </div>
+            <span class="text-slate-400">&rarr;</span>
+          </button>
+
+          <button onclick="navigateTo('co')" class="flex items-center justify-between p-4 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 hover:border-indigo-500 transition text-left group">
+            <div class="flex items-center space-x-3">
+              <div class="w-10 h-10 rounded-lg bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400 flex items-center justify-center font-bold">CO</div>
+              <div>
+                <strong class="block text-sm text-slate-900 dark:text-white group-hover:text-indigo-600 transition">Compréhension Orale</strong>
+                <span class="text-xs text-slate-500 dark:text-slate-400">Audio parlé & conversations réelles</span>
+              </div>
+            </div>
+            <span class="text-slate-400">&rarr;</span>
+          </button>
+
+          <button onclick="navigateTo('ee')" class="flex items-center justify-between p-4 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 hover:border-amber-500 transition text-left group">
+            <div class="flex items-center space-x-3">
+              <div class="w-10 h-10 rounded-lg bg-amber-100 dark:bg-amber-900/40 text-amber-600 dark:text-amber-400 flex items-center justify-center font-bold">EE</div>
+              <div>
+                <strong class="block text-sm text-slate-900 dark:text-white group-hover:text-amber-600 transition">Expression Écrite</strong>
+                <span class="text-xs text-slate-500 dark:text-slate-400">3 tâches avec compteur de mots strict</span>
+              </div>
+            </div>
+            <span class="text-slate-400">&rarr;</span>
+          </button>
+
+          <button onclick="navigateTo('eo')" class="flex items-center justify-between p-4 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 hover:border-rose-500 transition text-left group">
+            <div class="flex items-center space-x-3">
+              <div class="w-10 h-10 rounded-lg bg-rose-100 dark:bg-rose-900/40 text-rose-600 dark:text-rose-400 flex items-center justify-center font-bold">EO</div>
+              <div>
+                <strong class="block text-sm text-slate-900 dark:text-white group-hover:text-rose-600 transition">Expression Orale</strong>
+                <span class="text-xs text-slate-500 dark:text-slate-400">Chrono officiel & enregistreur vocal</span>
+              </div>
+            </div>
+            <span class="text-slate-400">&rarr;</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Rappel des exigences pour la nationalité -->
+      <div class="p-4 rounded-xl bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900 text-xs text-blue-900 dark:text-blue-200 space-y-1.5 leading-relaxed">
+        <div class="font-bold flex items-center space-x-1.5">
+          <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          <span>Exigences du Ministère de l'Intérieur :</span>
+        </div>
+        <p>
+          Pour la naturalisation par décret ou déclaration de mariage, vous devez obtenir une attestation de niveau <strong>B1 minimum</strong> sur les 4 compétences. L'attestation est valable 2 ans.
+        </p>
+      </div>
+
+      <!-- Bouton réinitialiser -->
+      <div class="pt-2 text-center">
+        <button onclick="resetAllProgress()" class="text-xs text-slate-400 hover:text-rose-500 underline transition">
+          Réinitialiser tous mes résultats et scores
+        </button>
+      </div>
+    </section>
+
+    <!-- PAGE 2 : COMPRÉHENSION ÉCRITE (CE) -->
+    <section id="view-ce" class="hidden space-y-4">
+      <!-- En-tête épreuve CE -->
+      <div class="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 flex items-center justify-between">
+        <div>
+          <span class="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider block">Compréhension Écrite</span>
+          <h2 id="ce-counter" class="text-sm font-bold text-slate-900 dark:text-white">Question 1 sur 4</h2>
+        </div>
+        <div class="flex items-center space-x-2">
+          <span id="ce-level-badge" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 font-semibold border border-slate-200 dark:border-slate-600">B1</span>
+        </div>
+      </div>
+
+      <!-- Document authentique à lire -->
+      <div class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-xs space-y-3">
+        <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Document support :</span>
+        <div id="ce-doc-content" class="bg-slate-50 dark:bg-slate-900/60 p-4 rounded-lg font-mono text-xs sm:text-sm text-slate-800 dark:text-slate-200 whitespace-pre-line border border-slate-200 dark:border-slate-700">
+          <!-- Injecté en JS -->
+        </div>
+      </div>
+
+      <!-- Question & Choix -->
+      <div class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-xs space-y-4">
+        <h3 id="ce-question-text" class="text-sm sm:text-base font-bold text-slate-900 dark:text-white leading-snug">
+          <!-- Injecté en JS -->
+        </h3>
+
+        <div id="ce-options-container" class="space-y-2">
+          <!-- Options injectées en JS -->
+        </div>
+
+        <div class="pt-3 border-t border-slate-100 dark:border-slate-700 flex items-center justify-between">
+          <button id="ce-btn-prev" onclick="cePrevQuestion()" class="px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 text-xs font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 disabled:opacity-40">Précédent</button>
+          
+          <button id="ce-btn-action" onclick="ceHandleAction()" class="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs sm:text-sm shadow-md transition">Valider</button>
+
+          <button id="ce-btn-next" onclick="ceNextQuestion()" class="px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 text-xs font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 disabled:opacity-40">Suivant</button>
+        </div>
+
+        <!-- Explication pédagogique -->
+        <div id="ce-explanation" class="hidden p-3.5 rounded-xl bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900 text-xs text-blue-950 dark:text-blue-200 space-y-1">
+          <strong class="block font-bold">Explication :</strong>
+          <p id="ce-explanation-text"></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- PAGE 3 : COMPRÉHENSION ORALE (CO) -->
+    <section id="view-co" class="hidden space-y-4">
+      <div class="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 flex items-center justify-between">
+        <div>
+          <span class="text-xs font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider block">Compréhension Orale</span>
+          <h2 id="co-counter" class="text-sm font-bold text-slate-900 dark:text-white">Document 1 sur 4</h2>
+        </div>
+        <span id="co-level-badge" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 font-semibold border border-slate-200 dark:border-slate-600">A2</span>
+      </div>
+
+      <!-- Lecteur Audio Web Speech API -->
+      <div class="bg-gradient-to-r from-slate-900 to-indigo-950 text-white rounded-2xl p-5 shadow-md space-y-4">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-3">
+            <div id="co-audio-pulse" class="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"/></svg>
+            </div>
+            <div>
+              <span class="text-xs text-indigo-300 block">Contexte d'écoute :</span>
+              <strong id="co-context-text" class="text-sm sm:text-base font-bold text-white">Annonce en gare</strong>
+            </div>
+          </div>
+
+          <!-- Contrôle Vitesse Audio -->
+          <button onclick="toggleAudioSpeed()" id="co-speed-btn" class="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-xs font-mono font-bold text-indigo-200 border border-white/15">
+            1.0x
+          </button>
+        </div>
+
+        <div class="flex items-center space-x-2 pt-1">
+          <button id="co-btn-play" onclick="playAudioCurrentQuestion()" class="flex-1 py-2.5 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-500 font-bold text-xs sm:text-sm flex items-center justify-center space-x-2 shadow-sm transition">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M4 4l12 6-12 6V4z"/></svg>
+            <span id="co-play-text">Écouter le document sonore</span>
+          </button>
+
+          <button onclick="stopAudio()" class="px-3 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-xs font-medium">
+            Stop
+          </button>
+        </div>
+
+        <div class="flex items-center justify-between text-[11px] text-indigo-200">
+          <span>Simulation de conditions officielles (écoute unique conseillée)</span>
+          <button onclick="toggleTranscript()" class="underline hover:text-white">Transcription</button>
+        </div>
+
+        <div id="co-transcript-box" class="hidden p-3 rounded-lg bg-black/30 border border-white/10 text-xs text-indigo-100 whitespace-pre-line">
+          <!-- Injecté en JS -->
+        </div>
+      </div>
+
+      <!-- QCM CO -->
+      <div class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-xs space-y-4">
+        <h3 id="co-question-text" class="text-sm sm:text-base font-bold text-slate-900 dark:text-white leading-snug">
+          <!-- Injecté en JS -->
+        </h3>
+
+        <div id="co-options-container" class="space-y-2">
+          <!-- Options injectées en JS -->
+        </div>
+
+        <div class="pt-3 border-t border-slate-100 dark:border-slate-700 flex items-center justify-between">
+          <button id="co-btn-prev" onclick="coPrevQuestion()" class="px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 text-xs font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 disabled:opacity-40">Précédent</button>
+          
+          <button id="co-btn-action" onclick="coHandleAction()" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs sm:text-sm shadow-md transition">Valider</button>
+
+          <button id="co-btn-next" onclick="coNextQuestion()" class="px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 text-xs font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 disabled:opacity-40">Suivant</button>
+        </div>
+
+        <div id="co-explanation" class="hidden p-3.5 rounded-xl bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-200 dark:border-indigo-900 text-xs text-indigo-950 dark:text-indigo-200 space-y-1">
+          <strong class="block font-bold">Explication :</strong>
+          <p id="co-explanation-text"></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- PAGE 4 : EXPRESSION ÉCRITE (EE) -->
+    <section id="view-ee" class="hidden space-y-4">
+      <!-- Sélecteur des 3 tâches TCF IRN -->
+      <div class="grid grid-cols-3 gap-2">
+        <button onclick="setEeTask(0)" id="ee-tab-0" class="p-2.5 rounded-xl border text-center transition border-amber-500 bg-amber-50 dark:bg-amber-950/40 text-amber-900 dark:text-amber-200 font-bold text-xs">
+          Tâche 1 (40-50 m)
+        </button>
+        <button onclick="setEeTask(1)" id="ee-tab-1" class="p-2.5 rounded-xl border text-center transition border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs">
+          Tâche 2 (70-80 m)
+        </button>
+        <button onclick="setEeTask(2)" id="ee-tab-2" class="p-2.5 rounded-xl border text-center transition border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs">
+          Tâche 3 (100-120 m)
+        </button>
+      </div>
+
+      <div class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-xs space-y-4">
+        <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-700">
+          <div>
+            <h3 id="ee-task-title" class="text-sm sm:text-base font-bold text-slate-900 dark:text-white">Tâche 1 : Message court de la vie quotidienne</h3>
+            <span id="ee-task-target" class="text-xs text-slate-500 dark:text-slate-400">Objectif officiel : 40 à 50 mots</span>
+          </div>
+
+          <!-- Chrono d'entraînement -->
+          <div class="flex items-center space-x-2">
+            <span id="ee-timer-display" class="font-mono text-xs sm:text-sm font-bold px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-slate-200">15:00</span>
+            <button onclick="toggleEeTimer()" id="ee-timer-btn" class="p-1 rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs font-semibold">Start</button>
+          </div>
+        </div>
+
+        <!-- Consigne officielle -->
+        <div class="bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-900/60 p-4 rounded-xl text-xs sm:text-sm text-amber-950 dark:text-amber-200 leading-relaxed">
+          <strong class="block mb-1 font-bold text-amber-900 dark:text-amber-100">Sujet de l'épreuve :</strong>
+          <span id="ee-prompt-text"></span>
+        </div>
+
+        <!-- Éditeur avec compteur de mots dynamique -->
+        <div class="space-y-2">
+          <div class="flex items-center justify-between text-xs">
+            <span class="text-slate-500 dark:text-slate-400">Rédigez votre texte :</span>
+            <div id="ee-word-counter-badge" class="px-2 py-0.5 rounded-full font-bold text-xs bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300">
+              0 mot
+            </div>
+          </div>
+          <textarea id="ee-textarea" oninput="handleEeInput()" rows="7" placeholder="Tapez votre production ici en français..." class="w-full p-3.5 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 text-sm focus:ring-2 focus:ring-amber-500 outline-hidden leading-relaxed"></textarea>
+        </div>
+
+        <!-- Grille d'évaluation B1 -->
+        <div class="p-3 bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-slate-200 dark:border-slate-700 text-xs space-y-1.5">
+          <span class="font-bold text-slate-700 dark:text-slate-300 block">Critères de réussite B1 :</span>
+          <div id="ee-criteria-list" class="grid grid-cols-1 sm:grid-cols-2 gap-1 text-slate-600 dark:text-slate-400">
+            <!-- Injecté en JS -->
+          </div>
+        </div>
+
+        <!-- Corrigé type B1 -->
+        <div class="pt-2 flex items-center justify-between">
+          <button onclick="toggleEeSample()" class="text-xs font-bold text-amber-600 dark:text-amber-400 hover:underline">
+            Afficher / Masquer l'exemple corrigé B1
+          </button>
+          <button onclick="clearEeText()" class="text-xs text-slate-400 hover:text-rose-500">
+            Effacer
+          </button>
+        </div>
+
+        <div id="ee-sample-box" class="hidden p-4 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-900 text-xs sm:text-sm text-emerald-950 dark:text-emerald-100 space-y-2">
+          <div class="flex items-center justify-between font-bold">
+            <span>Exemple modèle niveau B1 :</span>
+            <span id="ee-sample-words" class="text-xs font-mono bg-emerald-200 dark:bg-emerald-800 px-2 py-0.5 rounded"></span>
+          </div>
+          <p id="ee-sample-text" class="whitespace-pre-line leading-relaxed italic bg-white dark:bg-slate-900 p-3 rounded-lg border border-emerald-100 dark:border-emerald-900"></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- PAGE 5 : EXPRESSION ORALE (EO) -->
+    <section id="view-eo" class="hidden space-y-4">
+      <div class="grid grid-cols-3 gap-2">
+        <button onclick="setEoTask(0)" id="eo-tab-0" class="p-2.5 rounded-xl border text-center transition border-rose-500 bg-rose-50 dark:bg-rose-950/40 text-rose-900 dark:text-rose-200 font-bold text-xs">
+          Tâche 1 (Entretien)
+        </button>
+        <button onclick="setEoTask(1)" id="eo-tab-1" class="p-2.5 rounded-xl border text-center transition border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs">
+          Tâche 2 (Interaction)
+        </button>
+        <button onclick="setEoTask(2)" id="eo-tab-2" class="p-2.5 rounded-xl border text-center transition border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs">
+          Tâche 3 (Opinion)
+        </button>
+      </div>
+
+      <div class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-xs space-y-5">
+        <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-700">
+          <div>
+            <h3 id="eo-task-title" class="text-sm sm:text-base font-bold text-slate-900 dark:text-white leading-tight"></h3>
+            <span id="eo-task-timing" class="text-xs text-slate-500 dark:text-slate-400"></span>
+          </div>
+          <!-- Chronomètre Officiel -->
+          <div class="text-right">
+            <span id="eo-timer-phase" class="text-[10px] uppercase font-bold block text-rose-600 dark:text-rose-400">Phase Parole</span>
+            <span id="eo-timer-display" class="font-mono text-base font-black text-slate-900 dark:text-white">02:00</span>
+          </div>
+        </div>
+
+        <!-- Consigne et Rôle -->
+        <div class="bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/60 p-4 rounded-xl text-xs sm:text-sm text-rose-950 dark:text-rose-200 space-y-1.5 leading-relaxed">
+          <strong class="block font-bold text-rose-900 dark:text-rose-100">Mise en situation de l'entretien :</strong>
+          <p id="eo-guidance-text"></p>
+        </div>
+
+        <!-- Boîte de simulation avec enregistreur vocal (MediaRecorder) -->
+        <div class="p-4 rounded-2xl bg-slate-900 text-white space-y-3">
+          <div class="flex items-center justify-between">
+            <div>
+              <span class="text-xs font-bold block">Simulateur d'épreuve orale</span>
+              <p class="text-[11px] text-slate-400">Enregistrez votre réponse pour écouter votre diction.</p>
+            </div>
+            <div id="eo-rec-indicator" class="hidden flex items-center space-x-1.5 text-xs text-rose-400 font-bold">
+              <span class="w-2.5 h-2.5 rounded-full bg-rose-500 animate-ping"></span>
+              <span>Micro Actif</span>
+            </div>
+          </div>
+
+          <div class="flex items-center space-x-2 pt-1">
+            <button id="eo-btn-start" onclick="startEoSimulation()" class="flex-1 py-2.5 px-4 rounded-xl bg-rose-600 hover:bg-rose-500 font-bold text-xs sm:text-sm flex items-center justify-center space-x-2 shadow-sm transition">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M4 4l12 6-12 6V4z"/></svg>
+              <span>Lancer le chrono & l'enregistrement</span>
+            </button>
+
+            <button id="eo-btn-stop" onclick="stopEoSimulation()" class="hidden px-4 py-2.5 rounded-xl bg-slate-700 hover:bg-slate-600 font-bold text-xs">
+              Terminer
+            </button>
+          </div>
+
+          <!-- Lecteur de la prestation audio enregistrée -->
+          <div id="eo-audio-player-box" class="hidden pt-2 border-t border-slate-800 flex items-center justify-between">
+            <span class="text-xs text-emerald-400 font-medium">Votre enregistrement :</span>
+            <audio id="eo-recorded-audio" controls class="h-8 max-w-[200px]"></audio>
+          </div>
+        </div>
+
+        <!-- Trame de réponse recommandée au B1 -->
+        <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 space-y-2">
+          <strong class="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wide block">
+            Plan et phrases types recommandés pour le niveau B1 :
+          </strong>
+          <ul id="eo-outline-list" class="space-y-1.5 text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+            <!-- Injecté en JS -->
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- PAGE 6 : FICHES MÉMO & OUTILS B1 -->
+    <section id="view-memo" class="hidden space-y-4">
+      <div class="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700">
+        <h2 class="text-base font-bold text-slate-900 dark:text-white">Boîte à Outils B1 - Mémento Essentiel</h2>
+        <p class="text-xs text-slate-500 dark:text-slate-400">À réviser pour réussir l'examen et l'entretien préfectoral.</p>
+      </div>
+
+      <!-- Accordéon 1 : Connecteurs logiques -->
+      <div class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-4 space-y-3">
+        <h3 class="text-sm font-bold text-blue-600 dark:text-blue-400 flex items-center space-x-2">
+          <span class="w-6 h-6 rounded-md bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300 flex items-center justify-center text-xs">1</span>
+          <span>Connecteurs logiques indispensables (Très valorisés au B1)</span>
+        </h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+          <div class="p-3 bg-slate-50 dark:bg-slate-900 rounded-lg space-y-1">
+            <strong class="text-slate-900 dark:text-white block font-bold">Pour justifier (Cause) :</strong>
+            <p class="text-slate-600 dark:text-slate-400"><em>parce que</em> (oral courant), <em>car</em> (écrit), <em>grâce à</em> (+ nom positif), <em>à cause de</em> (+ nom négatif), <em>puisque</em>.</p>
+          </div>
+          <div class="p-3 bg-slate-50 dark:bg-slate-900 rounded-lg space-y-1">
+            <strong class="text-slate-900 dark:text-white block font-bold">Pour conclure (Conséquence) :</strong>
+            <p class="text-slate-600 dark:text-slate-400"><em>donc</em>, <em>c'est pourquoi</em>, <em>par conséquent</em>, <em>ainsi</em>.</p>
+          </div>
+          <div class="p-3 bg-slate-50 dark:bg-slate-900 rounded-lg space-y-1">
+            <strong class="text-slate-900 dark:text-white block font-bold">Pour nuancer (Opposition) :</strong>
+            <p class="text-slate-600 dark:text-slate-400"><em>mais</em>, <em>cependant</em>, <em>en revanche</em>, <em>pourtant</em>.</p>
+          </div>
+          <div class="p-3 bg-slate-50 dark:bg-slate-900 rounded-lg space-y-1">
+            <strong class="text-slate-900 dark:text-white block font-bold">Pour structurer son avis :</strong>
+            <p class="text-slate-600 dark:text-slate-400"><em>tout d'abord</em>, <em>d'une part... d'autre part</em>, <em>de plus</em>, <em>en conclusion</em>.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Accordéon 2 : Vocabulaire républicain et démarches -->
+      <div class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-4 space-y-3">
+        <h3 class="text-sm font-bold text-indigo-600 dark:text-indigo-400 flex items-center space-x-2">
+          <span class="w-6 h-6 rounded-md bg-indigo-100 dark:bg-indigo-900 text-indigo-600 dark:text-indigo-300 flex items-center justify-center text-xs">2</span>
+          <span>Lexique récurrent de l'intégration & de l'administration</span>
+        </h3>
+        <div class="flex flex-wrap gap-1.5 text-xs">
+          <span class="px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-slate-200">Titre de séjour / Récépissé</span>
+          <span class="px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-slate-200">Justificatif de domicile</span>
+          <span class="px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-slate-200">Avis d'imposition sur le revenu</span>
+          <span class="px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-slate-200">Contrat de bail / Quittance</span>
+          <span class="px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-slate-200">Bulletin de paie (salaire)</span>
+          <span class="px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-slate-200">Extrait d'acte de naissance</span>
+          <span class="px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-slate-200">Liberté, Égalité, Fraternité</span>
+          <span class="px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-slate-200">Laïcité républicaine</span>
+        </div>
+      </div>
+
+      <!-- Accordéon 3 : Stratégies le jour de l'épreuve -->
+      <div class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-4 space-y-3">
+        <h3 class="text-sm font-bold text-emerald-600 dark:text-emerald-400 flex items-center space-x-2">
+          <span class="w-6 h-6 rounded-md bg-emerald-100 dark:emerald-900 text-emerald-600 dark:text-emerald-300 flex items-center justify-center text-xs">3</span>
+          <span>Conseils stratégiques pour le jour J</span>
+        </h3>
+        <ul class="space-y-2 text-xs text-slate-600 dark:text-slate-400">
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-600 font-bold">•</span>
+            <span><strong>Aucun point négatif au QCM :</strong> si vous hésitez, ne laissez jamais une case vide. Éliminez les choix impossibles et cochez une réponse.</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-600 font-bold">•</span>
+            <span><strong>Nombre de mots en Expression Écrite :</strong> les examinateurs comptent les mots. Si vous écrivez moins de 40 mots à la tâche 1, vous perdez automatiquement des points.</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-600 font-bold">•</span>
+            <span><strong>Expression Orale :</strong> l'examinateur n'attend pas un français parfait sans accent. Il évalue votre capacité à comprendre, échanger et défendre une opinion avec des phrases claires et articulées.</span>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- NAVIGATION DU BAS (Bottom Navigation Mobile First) -->
+  <nav class="fixed bottom-0 left-0 right-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 px-2 py-1.5 safe-bottom">
+    <div class="max-w-md mx-auto grid grid-cols-5 text-center">
+      <button onclick="navigateTo('dashboard')" id="nav-dashboard" class="flex flex-col items-center py-1 text-blue-600 dark:text-blue-400">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+        <span class="text-[10px] font-medium mt-0.5">Accueil</span>
+      </button>
+
+      <button onclick="navigateTo('ce')" id="nav-ce" class="flex flex-col items-center py-1 text-slate-400 dark:text-slate-500 hover:text-slate-800 dark:hover:text-slate-200">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+        <span class="text-[10px] font-medium mt-0.5">Écrit</span>
+      </button>
+
+      <button onclick="navigateTo('co')" id="nav-co" class="flex flex-col items-center py-1 text-slate-400 dark:text-slate-500 hover:text-slate-800 dark:hover:text-slate-200">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"/></svg>
+        <span class="text-[10px] font-medium mt-0.5">Écoute</span>
+      </button>
+
+      <button onclick="navigateTo('ee')" id="nav-ee" class="flex flex-col items-center py-1 text-slate-400 dark:text-slate-500 hover:text-slate-800 dark:hover:text-slate-200">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+        <span class="text-[10px] font-medium mt-0.5">Rédiger</span>
+      </button>
+
+      <button onclick="navigateTo('eo')" id="nav-eo" class="flex flex-col items-center py-1 text-slate-400 dark:text-slate-500 hover:text-slate-800 dark:hover:text-slate-200">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"/></svg>
+        <span class="text-[10px] font-medium mt-0.5">Parler</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- NOTIFICATION TOAST -->
+  <div id="toast" class="fixed bottom-20 left-1/2 transform -translate-x-1/2 z-50 bg-slate-900/90 text-white text-xs px-4 py-2 rounded-full shadow-lg transition-all duration-300 opacity-0 pointer-events-none">
+    Lien copié dans le presse-papier !
+  </div>
+
+  <!-- JAVASCRIPT ET LOGIQUE METIER COMPLÈTE -->
+  <script>
+    /* ========================================================
+       1. DONNÉES OFFICIELLES DU TCF IRN (B1)
+       ======================================================== */
+    const CE_DATA = [
+      {
+        id: 1,
+        level: "A1",
+        doc: `HORAIRES DE LA PHARMACIE DU CENTRE
+Du lundi au vendredi : 08h30 - 19h30 sans interruption.
+Le samedi : 09h00 - 18h00.
+Dimanche et jours fériés : consulter la liste des pharmacies de garde affichée sur la vitre extérieure ou composer le 3237.`,
+        question: "Quand la pharmacie est-elle ouverte en continu ?",
+        options: [
+          "Le samedi de 9h à 18h",
+          "Du lundi au vendredi toute la journée",
+          "Le dimanche matin uniquement",
+          "Uniquement les jours fériés"
+        ],
+        correct: 1,
+        explanation: "Le texte stipule explicitement : 'Du lundi au vendredi : 08h30 - 19h30 sans interruption'."
+      },
+      {
+        id: 2,
+        level: "A2",
+        doc: `De : ecole.maternelle.pasteur@ac-paris.fr
+À : parents.eleves@listes.fr
+Objet : Sortie pédagogique au parc zoologique
+
+Chers parents,
+La sortie au zoo prévue ce jeudi 14 mai est reportée au mardi 19 mai en raison des fortes pluies annoncées. 
+Les horaires restent identiques : départ de l'école en car à 8h45 et retour prévu pour 16h15. 
+Merci de prévoir un sac à dos avec un pique-nique et une gourde d'eau.`,
+        question: "Pourquoi la sortie au zoo est-elle déplacée ?",
+        options: [
+          "L'école n'a pas trouvé de chauffeur de car",
+          "Les conditions météo sont mauvaises le 14 mai",
+          "Les parents ont demandé à modifier les horaires",
+          "Le zoo est fermé pour des travaux d'aménagement"
+        ],
+        correct: 1,
+        explanation: "Le courriel précise : 'est reportée au mardi 19 mai en raison des fortes pluies annoncées'."
+      },
+      {
+        id: 3,
+        level: "B1",
+        doc: `PRÉFECTURE - SERVICE DES ÉTRANGERS
+Modalités de dépôt des demandes de naturalisation :
+Toutes les démarches s'effectuent désormais de manière dématérialisée sur la plateforme nationale ANEF.
+Les demandeurs ne doivent plus envoyer de dossier papier par voie postale ni se présenter aux guichets d'accueil sans convocation officielle reçue par courriel. 
+Un agent vous contactera par messagerie sécurisée si des pièces complémentaires sont requises.`,
+        question: "Quelle consigne stricte les usagers doivent-ils respecter ?",
+        options: [
+          "Envoyer leur dossier complet par lettre recommandée avec accusé de réception",
+          "Effectuer impérativement l'ensemble de leur démarche en ligne sur le portail ANEF",
+          "Venir tous les matins au guichet pour retirer un formulaire papier",
+          "Déposer leur dossier auprès du commissariat de police de leur quartier"
+        ],
+        correct: 1,
+        explanation: "Le document indique : 'Toutes les démarches s'effectuent désormais de manière dématérialisée sur la plateforme nationale ANEF' et 'ne doivent plus envoyer de dossier papier'."
+      },
+      {
+        id: 4,
+        level: "B1",
+        doc: `TENDANCE : LE RECYCLAGE DES APPAREILS ÉLECTRONIQUES EN FRANCE
+Selon un rapport de l'Ademe, plus de 46 millions d'appareils électriques et électroniques dorment inutilisés dans les tiroirs des ménages français. 
+Pour encourager la réparation plutôt que le remplacement systématique, l'État a instauré le « Bonus Réparation », une déduction forfaitaire directe appliquée sur la facture chez les réparateurs labellisés QualiRépar.`,
+        question: "Quel est l'objectif premier du « Bonus Réparation » ?",
+        options: [
+          "Inciter les consommateurs à faire réparer leurs appareils plutôt qu'en racheter",
+          "Augmenter les taxes sur les appareils électroniques importés de l'étranger",
+          "Obliger les fabricants à reprendre les téléphones cassés gratuitement",
+          "Financer l'achat de téléviseurs neufs basse consommation"
+        ],
+        correct: 0,
+        explanation: "Le texte explique clairement : 'Pour encourager la réparation plutôt que le remplacement systématique, l'État a instauré le Bonus Réparation'."
+      }
+    ];
+
+    const CO_DATA = [
+      {
+        id: 1,
+        level: "A1",
+        context: "Message diffusé en gare SNCF",
+        script: "Mesdames et messieurs, votre attention s'il vous plaît. Le train TER numéro 85412 à destination de Lyon Part-Dieu, départ initialement prévu à 14 heures 15, partira voie C. Nous vous rappelons d'étiqueter vos bagages.",
+        question: "Où les voyageurs pour Lyon doivent-ils se rendre ?",
+        options: [
+          "Voie A",
+          "Voie B",
+          "Voie C",
+          "Au guichet d'information"
+        ],
+        correct: 2,
+        explanation: "L'annonce indique : 'départ initialement prévu à 14 heures 15, partira voie C'."
+      },
+      {
+        id: 2,
+        level: "A2",
+        context: "Répondeur d'un cabinet médical",
+        script: "Bonjour, vous êtes bien sur le répondeur du cabinet médical du docteur Lambert. Le secrétariat est ouvert du lundi au vendredi de 8 heures à midi. En cas d'urgence la nuit ou le week-end, veuillez composer le 15 pour joindre le SAMU.",
+        question: "Que devez-vous faire en cas d'urgence un dimanche ?",
+        options: [
+          "Laisser un message après le bip sonore",
+          "Appeler le numéro d'urgence 15",
+          "Venir au cabinet à 8 heures du matin",
+          "Envoyer un SMS au secrétariat"
+        ],
+        correct: 1,
+        explanation: "Le message audio précise : 'En cas d'urgence la nuit ou le week-end, veuillez composer le 15 pour joindre le SAMU'."
+      },
+      {
+        id: 3,
+        level: "B1",
+        context: "Dialogue entre un commerçant et un client",
+        script: "— Bonjour monsieur, j'ai acheté ce mixeur hier mais le moteur s'arrête au bout de trente secondes.\n— Bonjour. Avec le ticket de caisse, nous pouvons vous l'échanger contre un modèle neuf ou vous éditer un avoir valable un an. En revanche, nous ne pratiquons aucun remboursement en espèces.",
+        question: "Quelle proposition le commerçant fait-il au client ?",
+        options: [
+          "Un remboursement en liquide immédiat",
+          "Un échange ou un bon d'achat d'une durée d'un an",
+          "Une réparation payante dans un délai de 30 jours",
+          "Un refus de reprise car le produit a déjà été ouvert"
+        ],
+        correct: 1,
+        explanation: "Le vendeur annonce : 'nous pouvons vous l'échanger contre un modèle neuf ou vous éditer un avoir valable un an', en excluant le remboursement liquide."
+      },
+      {
+        id: 4,
+        level: "B1",
+        context: "Chronique radio sur la mobilité urbaine",
+        script: "La mairie de Toulouse vient d'annoncer l'extension des zones à trente kilomètres par heure à l'ensemble des quartiers résidentiels. L'objectif est de sécuriser les trajets à pied des enfants et d'apaiser la circulation. Certains automobilistes craignent des ralentissements aux heures de pointe, mais les associations de riverains se félicitent de cette mesure protectrice.",
+        question: "Pourquoi cette décision municipale a-t-elle été prise ?",
+        options: [
+          "Pour réduire le nombre de bus en circulation",
+          "Pour rendre les rues plus sûres pour les piétons et les enfants",
+          "Pour contraindre les habitants à acheter un vélo électrique",
+          "Pour fermer définitivement le centre-ville aux voitures"
+        ],
+        correct: 1,
+        explanation: "La chronique précise : 'L'objectif est de sécuriser les trajets à pied des enfants et d'apaiser la circulation'."
+      }
+    ];
+
+    const EE_DATA = [
+      {
+        id: 1,
+        title: "Tâche 1 : Message court de la vie quotidienne",
+        target: "40 à 50 mots",
+        minWords: 40,
+        maxWords: 55,
+        duration: 12 * 60,
+        prompt: `Vous ne pouvez pas vous rendre à votre rendez-vous de suivi chez le dentiste demain matin à 10h à cause d'une réunion professionnelle imprévue.
+Écrivez un message au secrétariat du cabinet pour annuler, expliquer brièvement la raison et solliciter un autre créneau en fin de journée.`,
+        sample: `Bonjour,\nJe vous informe que je ne pourrai pas venir à mon rendez-vous de demain à 10h à cause d'une réunion urgente à mon travail. Je vous prie de bien vouloir m'excuser. Serait-il possible de fixer un nouveau rendez-vous jeudi prochain après 17h30 ?\nBien cordialement,\nSamir`,
+        criteria: ["Politesse d'entrée et de sortie", "Justification claire", "Proposition de nouvel horaire", "Longueur 40-50 mots"]
+      },
+      {
+        id: 2,
+        title: "Tâche 2 : Récit d'une expérience vécue",
+        target: "70 à 80 mots",
+        minWords: 70,
+        maxWords: 90,
+        duration: 18 * 60,
+        prompt: `Vous avez participé le week-end dernier à une journée bénévole de nettoyage de la nature ou d'un parc organisée par votre commune.
+Écrivez à un ami pour lui raconter cette journée, lui partager vos impressions et lui proposer de venir avec vous à la prochaine édition.`,
+        sample: `Salut Thomas,\nSamedi dernier, j'ai participé à la journée citoyenne de nettoyage du parc organisée par ma mairie. C'était une expérience formidable ! Nous étions une cinquantaine d'habitants motivés et nous avons ramassé plusieurs dizaines de sacs de déchets. L'ambiance était très conviviale et nous avons partagé un pique-nique ensemble à midi sous le soleil. La mairie organise une nouvelle action le mois prochain, tu devrais vraiment m'accompagner ! Tu vas adorer.\nÀ bientôt,\nKarim`,
+        criteria: ["Temps du passé maîtrisés", "Partage d'émotions et ressenti", "Invitation finale claire", "Longueur 70-80 mots"]
+      },
+      {
+        id: 3,
+        title: "Tâche 3 : Prise de position argumentée (Essai court)",
+        target: "100 à 120 mots",
+        minWords: 100,
+        maxWords: 135,
+        duration: 25 * 60,
+        prompt: `Sur un forum citoyen, on pose la question suivante : « Faut-il rendre l'ensemble des transports en commun gratuits dans les grandes agglomérations ? »
+Donnez votre avis personnel de manière argumentée en illustrant avec des arguments concrets (avantages et inconvénients), puis concluez.`,
+        sample: `À mon avis, la gratuité des transports en commun dans les grandes villes est une initiative très positive qui présente plusieurs avantages majeurs.\n\nTout d'abord, cette mesure encourage les habitants à laisser leur voiture individuelle au garage, ce qui réduit significativement les embouteillages et la pollution atmosphérique. De plus, cela représente un gain économique important pour le pouvoir d'achat des familles modestes et des étudiants.\n\nCependant, il faut veiller à ce que cette gratuité n'entraîne pas une baisse de la qualité du service ou de la propreté des rames par manque de budget municipal.\n\nEn conclusion, je pense que la gratuité doit être encouragée tout en maintenant un entretien rigoureux des réseaux.`,
+        criteria: ["Connecteurs logiques variés", "Prise de position nette", "Arguments pour et limites", "Longueur 100-120 mots"]
+      }
+    ];
+
+    const EO_DATA = [
+      {
+        id: 1,
+        title: "Tâche 1 : Entretien individuel sans préparation",
+        prep: 0,
+        speak: 120,
+        timing: "Sans préparation • Entretien de 2 minutes",
+        guidance: "Présentez-vous à l'examinateur de façon fluide et naturelle : votre prénom, votre ville de résidence en France, votre situation familiale, votre profession ou vos projets professionnels, vos loisirs et votre attachement à la France.",
+        outline: [
+          "Saluer poliment : « Bonjour, je m'appelle... et j'ai ... ans. »",
+          "Présenter sa situation en France : « Je vis en France depuis ... années, actuellement j'habite à ... »",
+          "Décrire son parcours professionnel : « Dans mon travail, j'exerce comme... et j'apprécie particulièrement... »",
+          "Évoquer ses centres d'intérêt : « Pendant mon temps libre, je pratique... et je participe à des activités locales. »",
+          "Exprimer son projet républicain : « Je demande la nationalité pour m'engager pleinement dans la société française. »"
+        ]
+      },
+      {
+        id: 2,
+        title: "Tâche 2 : Exercice en interaction (Situation du quotidien)",
+        prep: 60,
+        speak: 210,
+        timing: "1 min de préparation • Interaction de 3 min 30",
+        guidance: "Vous venez d'emménager dans un nouvel appartement et vous constatez des infiltrations d'eau au plafond de votre cuisine. Vous appelez le propriétaire ou le gestionnaire pour signaler le problème, décrire les dégâts avec précision et fixer un rendez-vous rapide pour le passage d'un artisan plombier.",
+        outline: [
+          "Formule de courtoisie : « Bonjour Monsieur, je suis le nouveau locataire de l'appartement 4B... »",
+          "Exposer l'urgence clairement : « Je vous contacte car j'ai remarqué ce matin une fuite d'eau importante au plafond... »",
+          "Détailler les conséquences : « La peinture commence à s'écailler et l'humidité s'étend vers les prises électriques. »",
+          "Proposer des actions : « Avez-vous les coordonnées de l'assurance de l'immeuble ou d'un plombier conventionné ? »",
+          "Convenance d'un créneau : « Je suis disponible demain après-midi pour lui ouvrir la porte. Merci pour votre aide. »"
+        ]
+      },
+      {
+        id: 3,
+        title: "Tâche 3 : Expression d'un point de vue argumenté",
+        prep: 30,
+        speak: 270,
+        timing: "30 sec de réflexion • Prise de parole de 4 min 30",
+        guidance: "Sujet : « Pensez-vous que le bénévolat et l'engagement dans une association soient utiles pour réussir son intégration dans un pays ? » Donnez votre opinion personnelle en développant deux arguments concrets et un exemple tiré de votre vécu.",
+        outline: [
+          "Introduction claire : « Selon moi, s'engager dans une association constitue un formidable levier d'intégration. »",
+          "Argument 1 (Linguistique et social) : Pratiquer la langue française au quotidien avec des natifs en dehors du travail.",
+          "Argument 2 (Solidarité et citoyenneté) : Se sentir utile à la communauté locale et s'approprier les valeurs républicaines.",
+          "Exemple personnel : Partage d'une expérience (club de sport, collecte alimentaire, fête de quartier).",
+          "Conclusion : « C'est pourquoi j'encourage chaque personne arrivant en France à rejoindre une association. »"
+        ]
+      }
+    ];
+
+    /* ========================================================
+       2. ÉTAT GLOBAL ET PERSISTANCE LOCALSTORAGE
+       ======================================================== */
+    const STORAGE_KEY = 'tcf_irn_b1_data_v1';
+
+    let state = {
+      theme: 'light',
+      ceAnswers: {}, // { [qIdx]: selectedOption }
+      coAnswers: {},
+      eeTexts: { 0: "", 1: "", 2: "" },
+      eoRecordedCount: 0,
+      activeTab: 'dashboard',
+      ceCurrentIdx: 0,
+      coCurrentIdx: 0,
+      eeCurrentIdx: 0,
+      eoCurrentIdx: 0,
+      audioSpeed: 1.0,
+      coTranscriptVisible: false
+    };
+
+    function loadState() {
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          state = { ...state, ...parsed };
+        }
+      } catch (e) {
+        console.warn("Erreur lecture localStorage:", e);
+      }
+    }
+
+    function saveState() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({
+          theme: state.theme,
+          ceAnswers: state.ceAnswers,
+          coAnswers: state.coAnswers,
+          eeTexts: state.eeTexts,
+          eoRecordedCount: state.eoRecordedCount
+        }));
+      } catch (e) {
+        console.warn("Erreur sauvegarde localStorage:", e);
+      }
+      updateDashboardStats();
+    }
+
+    /* ========================================================
+       3. GESTION DU THÈME ET NAVIGATION
+       ======================================================== */
+    function applyTheme() {
+      if (state.theme === 'dark' || (!('theme' in state) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    }
+
+    function toggleTheme() {
+      state.theme = document.documentElement.classList.contains('dark') ? 'light' : 'dark';
+      applyTheme();
+      saveState();
+    }
+
+    function navigateTo(tabId) {
+      stopAudio();
+      stopEoSimulation();
+      state.activeTab = tabId;
+
+      const views = ['dashboard', 'ce', 'co', 'ee', 'eo', 'memo'];
+      views.forEach(v => {
+        const el = document.getElementById(`view-${v}`);
+        if (el) el.classList.toggle('hidden', v !== tabId);
+      });
+
+      // Mise à jour de la barre du bas
+      views.forEach(v => {
+        const btn = document.getElementById(`nav-${v}`);
+        if (btn) {
+          if (v === tabId) {
+            btn.className = "flex flex-col items-center py-1 text-blue-600 dark:text-blue-400 font-bold";
+          } else {
+            btn.className = "flex flex-col items-center py-1 text-slate-400 dark:text-slate-500 hover:text-slate-800 dark:hover:text-slate-200";
+          }
+        }
+      });
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      // Init specifique au module
+      if (tabId === 'ce') renderCe();
+      if (tabId === 'co') renderCo();
+      if (tabId === 'ee') renderEe();
+      if (tabId === 'eo') renderEo();
+      if (tabId === 'dashboard') updateDashboardStats();
+    }
+
+    /* ========================================================
+       4. LOGIQUE COMPRÉHENSION ÉCRITE (CE)
+       ======================================================== */
+    let ceSelectedTemp = null;
+    let ceSubmitted = false;
+
+    function renderCe() {
+      const q = CE_DATA[state.ceCurrentIdx];
+      ceSelectedTemp = state.ceAnswers[state.ceCurrentIdx] !== undefined ? state.ceAnswers[state.ceCurrentIdx] : null;
+      ceSubmitted = ceSelectedTemp !== null;
+
+      document.getElementById('ce-counter').textContent = `Question ${state.ceCurrentIdx + 1} sur ${CE_DATA.length}`;
+      document.getElementById('ce-level-badge').textContent = q.level;
+      document.getElementById('ce-doc-content').textContent = q.doc;
+      document.getElementById('ce-question-text').textContent = q.question;
+
+      // Boutons navigation
+      document.getElementById('ce-btn-prev').disabled = state.ceCurrentIdx === 0;
+      document.getElementById('ce-btn-next').disabled = state.ceCurrentIdx === CE_DATA.length - 1;
+
+      const container = document.getElementById('ce-options-container');
+      container.innerHTML = '';
+
+      q.options.forEach((opt, idx) => {
+        const btn = document.createElement('button');
+        btn.className = getOptionClasses(idx, ceSelectedTemp, q.correct, ceSubmitted);
+        btn.innerHTML = `
+          <div class="flex items-center space-x-3 text-left">
+            <span class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold border border-current flex-shrink-0">
+              ${String.fromCharCode(65 + idx)}
+            </span>
+            <span class="text-xs sm:text-sm">${opt}</span>
+          </div>
+        `;
+        btn.onclick = () => {
+          if (!ceSubmitted) {
+            ceSelectedTemp = idx;
+            renderCeOptionsOnly();
+          }
+        };
+        container.appendChild(btn);
+      });
+
+      // Bouton action
+      const actBtn = document.getElementById('ce-btn-action');
+      if (ceSubmitted) {
+        actBtn.textContent = "Validé";
+        actBtn.className = "px-4 py-2 rounded-xl bg-emerald-600 text-white font-bold text-xs sm:text-sm cursor-default";
+      } else {
+        actBtn.textContent = "Valider";
+        actBtn.className = "px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs sm:text-sm shadow-md transition";
+      }
+
+      // Explication
+      const expBox = document.getElementById('ce-explanation');
+      if (ceSubmitted) {
+        expBox.classList.remove('hidden');
+        document.getElementById('ce-explanation-text').textContent = q.explanation;
+      } else {
+        expBox.classList.add('hidden');
+      }
+    }
+
+    function renderCeOptionsOnly() {
+      const q = CE_DATA[state.ceCurrentIdx];
+      const container = document.getElementById('ce-options-container');
+      Array.from(container.children).forEach((btn, idx) => {
+        btn.className = getOptionClasses(idx, ceSelectedTemp, q.correct, ceSubmitted);
+      });
+    }
+
+    function ceHandleAction() {
+      if (ceSelectedTemp === null) {
+        showToast("Sélectionnez une option pour répondre.");
+        return;
+      }
+      if (!ceSubmitted) {
+        state.ceAnswers[state.ceCurrentIdx] = ceSelectedTemp;
+        saveState();
+        renderCe();
+      }
+    }
+
+    function ceNextQuestion() {
+      if (state.ceCurrentIdx < CE_DATA.length - 1) {
+        state.ceCurrentIdx++;
+        renderCe();
+      }
+    }
+
+    function cePrevQuestion() {
+      if (state.ceCurrentIdx > 0) {
+        state.ceCurrentIdx--;
+        renderCe();
+      }
+    }
+
+    function getOptionClasses(idx, selected, correct, submitted) {
+      const base = "w-full p-3 rounded-xl border transition flex items-center justify-between ";
+      if (submitted) {
+        if (idx === correct) {
+          return base + "border-emerald-500 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-900 dark:text-emerald-200 font-bold ring-1 ring-emerald-500";
+        }
+        if (selected === idx && idx !== correct) {
+          return base + "border-rose-500 bg-rose-50 dark:bg-rose-950/40 text-rose-900 dark:text-rose-200 ring-1 ring-rose-500";
+        }
+        return base + "border-slate-200 dark:border-slate-700 opacity-50 text-slate-400";
+      }
+      if (selected === idx) {
+        return base + "border-blue-600 bg-blue-50 dark:bg-blue-950/40 text-blue-900 dark:text-blue-200 font-semibold ring-1 ring-blue-600";
+      }
+      return base + "border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/50 text-slate-700 dark:text-slate-300";
+    }
+
+    /* ========================================================
+       5. LOGIQUE COMPRÉHENSION ORALE (CO) & WEB SPEECH API
+       ======================================================== */
+    let coSelectedTemp = null;
+    let coSubmitted = false;
+    let isSpeaking = false;
+
+    function renderCo() {
+      const q = CO_DATA[state.coCurrentIdx];
+      coSelectedTemp = state.coAnswers[state.coCurrentIdx] !== undefined ? state.coAnswers[state.coCurrentIdx] : null;
+      coSubmitted = coSelectedTemp !== null;
+
+      document.getElementById('co-counter').textContent = `Document ${state.coCurrentIdx + 1} sur ${CO_DATA.length}`;
+      document.getElementById('co-level-badge').textContent = q.level;
+      document.getElementById('co-context-text').textContent = q.context;
+      document.getElementById('co-question-text').textContent = q.question;
+      document.getElementById('co-transcript-box').textContent = q.script;
+
+      // Boutons navigation
+      document.getElementById('co-btn-prev').disabled = state.coCurrentIdx === 0;
+      document.getElementById('co-btn-next').disabled = state.coCurrentIdx === CO_DATA.length - 1;
+
+      const container = document.getElementById('co-options-container');
+      container.innerHTML = '';
+
+      q.options.forEach((opt, idx) => {
+        const btn = document.createElement('button');
+        btn.className = getOptionClasses(idx, coSelectedTemp, q.correct, coSubmitted);
+        btn.innerHTML = `
+          <div class="flex items-center space-x-3 text-left">
+            <span class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold border border-current flex-shrink-0">
+              ${String.fromCharCode(65 + idx)}
+            </span>
+            <span class="text-xs sm:text-sm">${opt}</span>
+          </div>
+        `;
+        btn.onclick = () => {
+          if (!coSubmitted) {
+            coSelectedTemp = idx;
+            renderCoOptionsOnly();
+          }
+        };
+        container.appendChild(btn);
+      });
+
+      const actBtn = document.getElementById('co-btn-action');
+      if (coSubmitted) {
+        actBtn.textContent = "Validé";
+        actBtn.className = "px-4 py-2 rounded-xl bg-emerald-600 text-white font-bold text-xs sm:text-sm cursor-default";
+      } else {
+        actBtn.textContent = "Valider";
+        actBtn.className = "px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs sm:text-sm shadow-md transition";
+      }
+
+      const expBox = document.getElementById('co-explanation');
+      if (coSubmitted) {
+        expBox.classList.remove('hidden');
+        document.getElementById('co-explanation-text').textContent = q.explanation;
+      } else {
+        expBox.classList.add('hidden');
+      }
+
+      // Masquer transcription par défaut pour chaque nouvelle question
+      document.getElementById('co-transcript-box').classList.add('hidden');
+      state.coTranscriptVisible = false;
+    }
+
+    function renderCoOptionsOnly() {
+      const q = CO_DATA[state.coCurrentIdx];
+      const container = document.getElementById('co-options-container');
+      Array.from(container.children).forEach((btn, idx) => {
+        btn.className = getOptionClasses(idx, coSelectedTemp, q.correct, coSubmitted);
+      });
+    }
+
+    function coHandleAction() {
+      if (coSelectedTemp === null) {
+        showToast("Sélectionnez une option après avoir écouté l'audio.");
+        return;
+      }
+      if (!coSubmitted) {
+        state.coAnswers[state.coCurrentIdx] = coSelectedTemp;
+        saveState();
+        renderCo();
+      }
+    }
+
+    function coNextQuestion() {
+      stopAudio();
+      if (state.coCurrentIdx < CO_DATA.length - 1) {
+        state.coCurrentIdx++;
+        renderCo();
+      }
+    }
+
+    function coPrevQuestion() {
+      stopAudio();
+      if (state.coCurrentIdx > 0) {
+        state.coCurrentIdx--;
+        renderCo();
+      }
+    }
+
+    function toggleTranscript() {
+      state.coTranscriptVisible = !state.coTranscriptVisible;
+      document.getElementById('co-transcript-box').classList.toggle('hidden', !state.coTranscriptVisible);
+    }
+
+    function toggleAudioSpeed() {
+      state.audioSpeed = state.audioSpeed === 1.0 ? 0.85 : 1.0;
+      document.getElementById('co-speed-btn').textContent = `${state.audioSpeed.toFixed(2)}x`;
+      showToast(`Vitesse audio réglée à ${state.audioSpeed}x`);
+    }
+
+    function playAudioCurrentQuestion() {
+      if (!('speechSynthesis' in window)) {
+        showToast("La synthèse vocale n'est pas supportée par votre navigateur.");
+        return;
+      }
+
+      stopAudio();
+      const q = CO_DATA[state.coCurrentIdx];
+      const utterance = new SpeechSynthesisUtterance(q.script);
+      utterance.lang = 'fr-FR';
+      utterance.rate = state.audioSpeed;
+
+      // Sélection d'une voix française si disponible
+      const voices = window.speechSynthesis.getVoices();
+      const frVoice = voices.find(v => v.lang.startsWith('fr') && (v.name.includes('French') || v.name.includes('France')));
+      if (frVoice) utterance.voice = frVoice;
+
+      utterance.onstart = () => {
+        isSpeaking = true;
+        document.getElementById('co-play-text').textContent = "Lecture audio en cours...";
+        document.getElementById('co-audio-pulse').classList.add('animate-pulse');
+      };
+
+      utterance.onend = () => {
+        isSpeaking = false;
+        document.getElementById('co-play-text').textContent = "Réécouter le document sonore";
+        document.getElementById('co-audio-pulse').classList.remove('animate-pulse');
+      };
+
+      utterance.onerror = () => {
+        isSpeaking = false;
+        document.getElementById('co-play-text').textContent = "Écouter le document sonore";
+        document.getElementById('co-audio-pulse').classList.remove('animate-pulse');
+      };
+
+      window.speechSynthesis.speak(utterance);
+    }
+
+    function stopAudio() {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+      isSpeaking = false;
+      const playTxt = document.getElementById('co-play-text');
+      if (playTxt) playTxt.textContent = "Écouter le document sonore";
+      const pulse = document.getElementById('co-audio-pulse');
+      if (pulse) pulse.classList.remove('animate-pulse');
+    }
+
+    /* ========================================================
+       6. LOGIQUE EXPRESSION ÉCRITE (EE)
+       ======================================================== */
+    let eeTimerInterval = null;
+    let eeTimeRemaining = EE_DATA[0].duration;
+    let eeTimerRunning = false;
+
+    function renderEe() {
+      const task = EE_DATA[state.eeCurrentIdx];
+      document.getElementById('ee-task-title').textContent = task.title;
+      document.getElementById('ee-task-target').textContent = `Objectif officiel TCF B1 : ${task.target}`;
+      document.getElementById('ee-prompt-text').textContent = task.prompt;
+
+      // Onglets
+      [0, 1, 2].forEach(i => {
+        const tab = document.getElementById(`ee-tab-${i}`);
+        if (i === state.eeCurrentIdx) {
+          tab.className = "p-2.5 rounded-xl border text-center transition border-amber-500 bg-amber-50 dark:bg-amber-950/40 text-amber-900 dark:text-amber-200 font-bold text-xs ring-1 ring-amber-500";
+        } else {
+          tab.className = "p-2.5 rounded-xl border text-center transition border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs";
+        }
+      });
+
+      // Textarea
+      const ta = document.getElementById('ee-textarea');
+      ta.value = state.eeTexts[state.eeCurrentIdx] || "";
+      handleEeInput();
+
+      // Critères
+      const critContainer = document.getElementById('ee-criteria-list');
+      critContainer.innerHTML = '';
+      task.criteria.forEach(c => {
+        const item = document.createElement('div');
+        item.className = "flex items-center space-x-1.5";
+        item.innerHTML = `<span class="text-emerald-500 font-bold">✓</span><span>${c}</span>`;
+        critContainer.appendChild(item);
+      });
+
+      // Exemple corrigé
+      document.getElementById('ee-sample-text').textContent = task.sample;
+      document.getElementById('ee-sample-words').textContent = `${countWords(task.sample)} mots`;
+      document.getElementById('ee-sample-box').classList.add('hidden');
+
+      // Reset timer
+      resetEeTimer();
+    }
+
+    function setEeTask(idx) {
+      state.eeCurrentIdx = idx;
+      renderEe();
+    }
+
+    function countWords(str) {
+      if (!str) return 0;
+      const clean = str.trim().replace(/['’\-]/g, ' ');
+      const matches = clean.match(/\S+/g);
+      return matches ? matches.length : 0;
+    }
+
+    function handleEeInput() {
+      const text = document.getElementById('ee-textarea').value;
+      state.eeTexts[state.eeCurrentIdx] = text;
+      saveState();
+
+      const words = countWords(text);
+      const task = EE_DATA[state.eeCurrentIdx];
+      const badge = document.getElementById('ee-word-counter-badge');
+
+      if (words === 0) {
+        badge.className = "px-2 py-0.5 rounded-full font-bold text-xs bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300";
+        badge.textContent = "0 mot";
+      } else if (words < task.minWords) {
+        badge.className = "px-2 py-0.5 rounded-full font-bold text-xs bg-amber-100 dark:bg-amber-900/60 text-amber-800 dark:text-amber-200";
+        badge.textContent = `${words} mots (Trop court • min ${task.minWords})`;
+      } else if (words <= task.maxWords) {
+        badge.className = "px-2 py-0.5 rounded-full font-bold text-xs bg-emerald-100 dark:bg-emerald-900/60 text-emerald-800 dark:text-emerald-200";
+        badge.textContent = `${words} mots (Parfait pour le B1 !)`;
+      } else {
+        badge.className = "px-2 py-0.5 rounded-full font-bold text-xs bg-rose-100 dark:bg-rose-900/60 text-rose-800 dark:text-rose-200";
+        badge.textContent = `${words} mots (Dépassement • max ${task.maxWords})`;
+      }
+    }
+
+    function toggleEeSample() {
+      document.getElementById('ee-sample-box').classList.toggle('hidden');
+    }
+
+    function clearEeText() {
+      if (confirm("Voulez-vous effacer votre texte pour cette tâche ?")) {
+        document.getElementById('ee-textarea').value = "";
+        handleEeInput();
+      }
+    }
+
+    function toggleEeTimer() {
+      if (eeTimerRunning) {
+        clearInterval(eeTimerInterval);
+        eeTimerRunning = false;
+        document.getElementById('ee-timer-btn').textContent = "Reprendre";
+      } else {
+        eeTimerRunning = true;
+        document.getElementById('ee-timer-btn').textContent = "Pause";
+        eeTimerInterval = setInterval(() => {
+          if (eeTimeRemaining > 0) {
+            eeTimeRemaining--;
+            updateEeTimerDisplay();
+          } else {
+            clearInterval(eeTimerInterval);
+            eeTimerRunning = false;
+            showToast("Temps écoulé pour cette tâche !");
+          }
+        }, 1000);
+      }
+    }
+
+    function resetEeTimer() {
+      clearInterval(eeTimerInterval);
+      eeTimerRunning = false;
+      eeTimeRemaining = EE_DATA[state.eeCurrentIdx].duration;
+      document.getElementById('ee-timer-btn').textContent = "Start";
+      updateEeTimerDisplay();
+    }
+
+    function updateEeTimerDisplay() {
+      const mins = Math.floor(eeTimeRemaining / 60);
+      const secs = eeTimeRemaining % 60;
+      document.getElementById('ee-timer-display').textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    }
+
+    /* ========================================================
+       7. LOGIQUE EXPRESSION ORALE (EO) & MEDIARECORDER
+       ======================================================== */
+    let eoTimerInterval = null;
+    let eoTimeRemaining = 0;
+    let eoPhase = 'idle'; // 'prep', 'speak', 'idle'
+    let mediaRecorder = null;
+    let audioChunks = [];
+
+    function renderEo() {
+      const task = EO_DATA[state.eoCurrentIdx];
+      document.getElementById('eo-task-title').textContent = task.title;
+      document.getElementById('eo-task-timing').textContent = task.timing;
+      document.getElementById('eo-guidance-text').textContent = task.guidance;
+
+      [0, 1, 2].forEach(i => {
+        const tab = document.getElementById(`eo-tab-${i}`);
+        if (i === state.eoCurrentIdx) {
+          tab.className = "p-2.5 rounded-xl border text-center transition border-rose-500 bg-rose-50 dark:bg-rose-950/40 text-rose-900 dark:text-rose-200 font-bold text-xs ring-1 ring-rose-500";
+        } else {
+          tab.className = "p-2.5 rounded-xl border text-center transition border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs";
+        }
+      });
+
+      const list = document.getElementById('eo-outline-list');
+      list.innerHTML = '';
+      task.outline.forEach(item => {
+        const li = document.createElement('li');
+        li.className = "flex items-start space-x-2";
+        li.innerHTML = `<span class="text-rose-500 font-bold">•</span><span>${item}</span>`;
+        list.appendChild(li);
+      });
+
+      stopEoSimulation();
+      document.getElementById('eo-timer-display').textContent = formatSeconds(task.speak);
+    }
+
+    function setEoTask(idx) {
+      state.eoCurrentIdx = idx;
+      renderEo();
+    }
+
+    function formatSeconds(sec) {
+      const m = Math.floor(sec / 60);
+      const s = sec % 60;
+      return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+    }
+
+    async function startEoSimulation() {
+      const task = EO_DATA[state.eoCurrentIdx];
+      
+      // Demande d'accès au micro
+      try {
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          mediaRecorder = new MediaRecorder(stream);
+          audioChunks = [];
+
+          mediaRecorder.ondataavailable = (e) => {
+            if (e.data.size > 0) audioChunks.push(e.data);
+          };
+
+          mediaRecorder.onstop = () => {
+            const blob = new Blob(audioChunks, { type: 'audio/webm' });
+            const url = URL.createObjectURL(blob);
+            const player = document.getElementById('eo-recorded-audio');
+            player.src = url;
+            document.getElementById('eo-audio-player-box').classList.remove('hidden');
+            stream.getTracks().forEach(t => t.stop());
+          };
+
+          mediaRecorder.start();
+          document.getElementById('eo-rec-indicator').classList.remove('hidden');
+        }
+      } catch (err) {
+        console.warn("Micro non autorisé ou absent : mode chrono actif sans enregistrement.");
+      }
+
+      document.getElementById('eo-btn-start').classList.add('hidden');
+      document.getElementById('eo-btn-stop').classList.remove('hidden');
+
+      if (task.prep > 0) {
+        eoPhase = 'prep';
+        eoTimeRemaining = task.prep;
+        document.getElementById('eo-timer-phase').textContent = "Phase Préparation (Réflexion)";
+      } else {
+        eoPhase = 'speak';
+        eoTimeRemaining = task.speak;
+        document.getElementById('eo-timer-phase').textContent = "Phase Parole (Parlez distinctement)";
+      }
+
+      document.getElementById('eo-timer-display').textContent = formatSeconds(eoTimeRemaining);
+
+      eoTimerInterval = setInterval(() => {
+        if (eoTimeRemaining > 0) {
+          eoTimeRemaining--;
+          document.getElementById('eo-timer-display').textContent = formatSeconds(eoTimeRemaining);
+        } else {
+          if (eoPhase === 'prep') {
+            eoPhase = 'speak';
+            eoTimeRemaining = task.speak;
+            document.getElementById('eo-timer-phase').textContent = "Phase Parole (C'est à vous !)";
+            document.getElementById('eo-timer-display').textContent = formatSeconds(eoTimeRemaining);
+          } else {
+            stopEoSimulation();
+            showToast("Temps d'entretien écoulé !");
+          }
+        }
+      }, 1000);
+
+      state.eoRecordedCount = Math.max(state.eoRecordedCount || 0, state.eoCurrentIdx + 1);
+      saveState();
+    }
+
+    function stopEoSimulation() {
+      clearInterval(eoTimerInterval);
+      eoPhase = 'idle';
+
+      if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+        mediaRecorder.stop();
+      }
+
+      document.getElementById('eo-rec-indicator').classList.add('hidden');
+      document.getElementById('eo-btn-start').classList.remove('hidden');
+      document.getElementById('eo-btn-stop').classList.add('hidden');
+      document.getElementById('eo-timer-phase').textContent = "En attente";
+    }
+
+    /* ========================================================
+       8. STATISTIQUES ET TABLEAU DE BORD
+       ======================================================== */
+    function updateDashboardStats() {
+      // CE
+      let ceCorrect = 0;
+      CE_DATA.forEach((q, idx) => {
+        if (state.ceAnswers[idx] === q.correct) ceCorrect++;
+      });
+      document.getElementById('dash-ce-score').textContent = `${ceCorrect} / ${CE_DATA.length}`;
+
+      // CO
+      let coCorrect = 0;
+      CO_DATA.forEach((q, idx) => {
+        if (state.coAnswers[idx] === q.correct) coCorrect++;
+      });
+      document.getElementById('dash-co-score').textContent = `${coCorrect} / ${CO_DATA.length}`;
+
+      // EE
+      let eeDone = 0;
+      EE_DATA.forEach((task, idx) => {
+        if (countWords(state.eeTexts[idx]) >= task.minWords) eeDone++;
+      });
+      document.getElementById('dash-ee-count').textContent = `${eeDone} / 3`;
+
+      // EO
+      document.getElementById('dash-eo-count').textContent = `${state.eoRecordedCount || 0} / 3`;
+
+      // Score QCM global
+      const totalQ = CE_DATA.length + CO_DATA.length;
+      const totalC = ceCorrect + coCorrect;
+      const pct = Math.round((totalC / totalQ) * 100);
+      document.getElementById('dash-global-score').textContent = `${pct}%`;
+
+      const badge = document.getElementById('dash-level-badge');
+      if (pct >= 75) {
+        badge.textContent = "Niveau B1 Validé !";
+        badge.className = "text-sm font-bold text-emerald-300";
+      } else if (pct >= 50) {
+        badge.textContent = "Niveau A2 Solide";
+        badge.className = "text-sm font-bold text-amber-300";
+      } else {
+        badge.textContent = "Niveau A1 / Débutant";
+        badge.className = "text-sm font-bold text-blue-200";
+      }
+    }
+
+    function resetAllProgress() {
+      if (confirm("Êtes-vous sûr de vouloir réinitialiser toutes vos réponses et vos rédactions ?")) {
+        state.ceAnswers = {};
+        state.coAnswers = {};
+        state.eeTexts = { 0: "", 1: "", 2: "" };
+        state.eoRecordedCount = 0;
+        saveState();
+        navigateTo('dashboard');
+        showToast("Progression réinitialisée.");
+      }
+    }
+
+    /* ========================================================
+       9. PARTAGE DE L'APPLICATION & NOTIFICATIONS
+       ======================================================== */
+    function shareApp() {
+      const shareData = {
+        title: "TCF IRN - Préparation B1 Nationalité",
+        text: "Entraîne-toi au TCF IRN pour la nationalité française avec cette application gratuite et hors ligne !",
+        url: window.location.href
+      };
+
+      if (navigator.share) {
+        navigator.share(shareData).catch(() => copyToClipboard(window.location.href));
+      } else {
+        copyToClipboard(window.location.href);
+      }
+    }
+
+    function copyToClipboard(text) {
+      const el = document.createElement('textarea');
+      el.value = text;
+      document.body.appendChild(el);
+      el.select();
+      document.execCommand('copy');
+      document.body.removeChild(el);
+      showToast("Lien copié dans le presse-papier !");
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      toast.textContent = msg;
+      toast.classList.remove('opacity-0', 'pointer-events-none');
+      setTimeout(() => {
+        toast.classList.add('opacity-0', 'pointer-events-none');
+      }, 2500);
+    }
+
+    /* ========================================================
+       10. PWA HORS LIGNE (MANIFESTE & SERVICE WORKER VIRTUEL)
+       ======================================================== */
+    let deferredPrompt = null;
+
+    function setupPWA() {
+      // 1. Génération dynamique du Manifest Web App
+      const manifestJson = {
+        name: "TCF IRN B1 Nationalité",
+        short_name: "TCF IRN",
+        start_url: window.location.href,
+        display: "standalone",
+        background_color: "#1e293b",
+        theme_color: "#2563eb",
+        description: "Application complète de révision du TCF IRN pour la nationalité française.",
+        icons: [
+          {
+            src: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%232563eb'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-weight='bold' font-size='38' fill='white'>B1</text></svg>",
+            sizes: "192x192",
+            type: "image/svg+xml"
+          }
+        ]
+      };
+
+      const manifestBlob = new Blob([JSON.stringify(manifestJson)], { type: 'application/json' });
+      document.getElementById('pwa-manifest').setAttribute('href', URL.createObjectURL(manifestBlob));
+
+      // 2. Écoute de l'événement d'installation Android/Chrome
+      window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        document.getElementById('pwa-install-banner').classList.remove('hidden');
+      });
+
+      // 3. Enregistrement d'un Service Worker en Data URI pour la mise en cache complète
+      if ('serviceWorker' in navigator) {
+        const swCode = `
+          const CACHE_NAME = 'tcf-irn-cache-v1';
+          self.addEventListener('install', (e) => {
+            self.skipWaiting();
+          });
+          self.addEventListener('activate', (e) => {
+            e.waitUntil(clients.claim());
+          });
+          self.addEventListener('fetch', (e) => {
+            e.respondWith(
+              caches.match(e.request).then((res) => {
+                return res || fetch(e.request).then((response) => {
+                  return caches.open(CACHE_NAME).then((cache) => {
+                    if (e.request.method === 'GET' && e.request.url.startsWith('http')) {
+                      cache.put(e.request, response.clone());
+                    }
+                    return response;
+                  });
+                });
+              }).catch(() => caches.match(e.request))
+            );
+          });
+        `;
+        const swBlob = new Blob([swCode], { type: 'application/javascript' });
+        navigator.serviceWorker.register(URL.createObjectURL(swBlob)).catch(err => {
+          console.log("Service Worker note: ", err);
+        });
+      }
+    }
+
+    function installPWA() {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then(() => {
+          deferredPrompt = null;
+          document.getElementById('pwa-install-banner').classList.add('hidden');
+        });
+      } else {
+        alert("Pour installer cette application sur votre smartphone :\n• Sur iPhone (Safari) : touchez 'Partager' puis 'Sur l'écran d'accueil'.\n• Sur Android (Chrome) : touchez les 3 points en haut à droite puis 'Ajouter à l'écran d'accueil'.");
+      }
+    }
+
+    function dismissPwaBanner() {
+      document.getElementById('pwa-install-banner').classList.add('hidden');
+    }
+
+    /* ========================================================
+       11. INITIALISATION DE L'APPLICATION
+       ======================================================== */
+    window.onload = function() {
+      loadState();
+      applyTheme();
+      setupPWA();
+      updateDashboardStats();
+
+      // Pré-chargement des voix SpeechSynthesis
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.onvoiceschanged = () => {
+          window.speechSynthesis.getVoices();
+        };
+      }
+    };
+  </script>
+</body>
+</html>
